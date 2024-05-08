@@ -5,7 +5,8 @@ from src.commands import Command, Commands
 
 @pytest.mark.parametrize("attr", ("name", "description", "handler"))
 def test_class_command(attr) -> None:
-    assert hasattr(Command("", "", lambda: ...), attr)
+    create_data = "", "", lambda: ...
+    assert hasattr(Command(*create_data), attr)
 
 
 @pytest.mark.parametrize(
