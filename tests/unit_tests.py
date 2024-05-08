@@ -64,8 +64,8 @@ def test_get_attr(cmd_name, expected_command, attr) -> None:
         (c.EXIT_CMD, c.EXIT_CMD_DESCR),
     ),
 )
-def test_input_cicle_return_description(monkeypatch, cmd_name, expected_descr) -> None:
-    monkeypatch.setattr("builtins.input", lambda _: f"{cmd_name}-d")
+def test_input_cicle_return_description(mock_input, cmd_name, expected_descr) -> None:
+    mock_input(f"{cmd_name}-d")
     assert input_cicle() == expected_descr
 
 
@@ -80,12 +80,12 @@ def test_input_cicle_return_description(monkeypatch, cmd_name, expected_descr) -
     ),
 )
 def test_input_cicle_return_handler_result(
-    monkeypatch, cmd_name, expected_handler_result
+    mock_input, cmd_name, expected_handler_result
 ) -> None:
-    monkeypatch.setattr("builtins.input", lambda _: cmd_name)
+    mock_input(cmd_name)
     assert input_cicle() == expected_handler_result
 
 
-def test_app_exit(monkeypatch) -> None:
-    monkeypatch.setattr("builtins.input", lambda _: c.EXIT_CMD)
+def test_app_exit(mock_input) -> None:
+    mock_input(c.EXIT_CMD)
     assert app() == -1
