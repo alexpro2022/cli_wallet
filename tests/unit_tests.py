@@ -1,7 +1,8 @@
 import pytest
 
 from src import constants as c
-from src.main import Command, Commands, get_cmd_attr, input_cicle, main
+from src.app import app, get_cmd_attr, input_cicle
+from src.commands import Command, Commands
 from src.utils import parse
 
 
@@ -85,6 +86,6 @@ def test_input_cicle_return_handler_result(
     assert input_cicle() == expected_handler_result
 
 
-def test_main_exit(monkeypatch) -> None:
+def test_app_exit(monkeypatch) -> None:
     monkeypatch.setattr("builtins.input", lambda _: c.EXIT_CMD)
-    assert main() == -1
+    assert app() == -1
