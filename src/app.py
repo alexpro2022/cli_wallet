@@ -1,80 +1,32 @@
-from dataclasses import dataclass
-
-DESCR_FLAG = "-d"
-INPUT_MSG = (
-    f"Введите команду (balance, add, edit, search) флаг {DESCR_FLAG} описание команды:"
-)
-HELP_MSG = f"Неизвестная команда - {INPUT_MSG}"
+from . import constants as c
+from .commands import Command, Commands
+from .utils import parse
 
 
-@dataclass
-class Command:
-    name: str
-    description: str
-
-
-class Commands:
-    balance = Command(
-        "balance",
-        "Вывод баланса: Показать текущий баланс, а также отдельно доходы и расходы.",
+def get_cmd_attr(cmd: str, attribute: str):
+    actual_commands: list[Command] = list(
+        map(
+            lambda command: getattr(Commands, command),
+            filter(lambda attr: not attr.startswith("__"), dir(Commands)),
+        )
     )
-    add_record = Command(
-        "add",
-        "Добавление записи: Возможность добавления новой записи о доходе или расходе.",
-    )
-    edit_record = Command(
-        "edit",
-        "Редактирование записи: Изменение существующих записей о доходах и расходах.",
-    )
-    search_record = Command(
-        "search", "Поиск по записям: Поиск записей по категории, дате или сумме."
-    )
+    for command in actual_commands:
+        if command.name == cmd:
+            return getattr(command, attribute)
+    return c.HELP_MSG
 
 
-def get_description(cmd: str) -> None:
-    match cmd:
-        case Commands.balance.name:
-            print(Commands.balance.description)
-        case Commands.add_record.name:
-            print(Commands.add_record.description)
-        case Commands.edit_record.name:
-            print(Commands.edit_record.description)
-        case Commands.search_record.name:
-            print(Commands.search_record.description)
-        case _:
-            print(HELP_MSG)
+def input_cicle() -> int | str:
+    cmd, flag = parse(input(c.INPUT_MSG))
+    if flag == c.DESCR_FLAG:
+        return get_cmd_attr(cmd, "description")
+    else:
+        return get_cmd_attr(cmd, "handler")()
 
 
-def balance() -> None: ...
-def add_record() -> None: ...
-def edit_record() -> None: ...
-def search_record() -> None: ...
-
-
-handlers = {
-    Commands.balance.name: balance,
-    Commands.add_record.name: add_record,
-    Commands.edit_record.name: edit_record,
-    Commands.search_record.name: search_record,
-}
-
-
-def parse(input: str) -> list[str]:
-    inp: list[str] = list(map(lambda s: s.strip(), input.split("-")))
-    if len(inp) == 1:
-        inp.append("")
-    return inp
-
-
-def main() -> None:
+def app() -> int:
     while True:
-        cmd, flag = parse(input(INPUT_MSG))
-        if flag == "d":
-            get_description(cmd)
-        else:
-            print("handlers")
-            handlers.get(cmd)
-
-
-if __name__ == "__main__":
-    main()
+        res = input_cicle()
+        if res == -1:
+            return -1
+        print(res)

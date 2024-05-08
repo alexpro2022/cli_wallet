@@ -1,4 +1,4 @@
 # cli_wallet
 
 
-python src/app.py
+python src/main.py
