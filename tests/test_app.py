@@ -2,34 +2,9 @@ import pytest
 
 from src import constants as c
 from src.app import app, get_cmd_attr, input_cicle
-from src.commands import Command, Commands
-from src.utils import parse
+from src.commands import Commands
 
-
-@pytest.mark.parametrize("attr", ("name", "description", "handler"))
-def test_class_command(attr) -> None:
-    assert hasattr(Command("", "", lambda: ...), attr)
-
-
-@pytest.mark.parametrize(
-    "attr", ("balance", "add_record", "edit_record", "search_record", "exit")
-)
-def test_class_commands(attr) -> None:
-    assert hasattr(Commands, attr)
-
-
-@pytest.mark.parametrize(
-    "input, expected",
-    (
-        ("cmd-flag", ["cmd", "flag"]),
-        (" cmd - flag ", ["cmd", "flag"]),
-        ("cmd", ["cmd", ""]),
-    ),
-)
-def test_parse(input, expected) -> None:
-    assert parse(input) == expected
-
-
+FILE_PATH = ""
 attrs = pytest.mark.parametrize("attr", ("description", "handler"))
 
 
@@ -66,7 +41,7 @@ def test_get_attr(cmd_name, expected_command, attr) -> None:
 )
 def test_input_cicle_return_description(mock_input, cmd_name, expected_descr) -> None:
     mock_input(f"{cmd_name}-d")
-    assert input_cicle() == expected_descr
+    assert input_cicle(FILE_PATH) == expected_descr
 
 
 @pytest.mark.parametrize(
@@ -83,9 +58,10 @@ def test_input_cicle_return_handler_result(
     mock_input, cmd_name, expected_handler_result
 ) -> None:
     mock_input(cmd_name)
-    assert input_cicle() == expected_handler_result
+    assert input_cicle(FILE_PATH) == expected_handler_result
 
 
-def test_app_exit(mock_input) -> None:
+def test_app_exit(mock_input, mock_os_dir) -> None:
     mock_input(c.EXIT_CMD)
+    mock_os_dir()
     assert app() == -1

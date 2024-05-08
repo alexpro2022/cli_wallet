@@ -20,3 +20,6 @@ INPUT_MSG = (
     f"флаг -{DESCR_FLAG} описание команды:"
 )
 HELP_MSG = f"Неизвестная команда - {INPUT_MSG}"
+
+REPO_DIR_NAME = "data"
+REPO_FILE_NAME = "data.csv"
