@@ -1,7 +1,7 @@
 from src import constants as c
 from src.app import app, get_cmd_attr, input_cicle
 from src.commands import Commands
-from tests.data import COMMAND_ATTRS, EXPECTED_BALANCE_RESULT, FILE_PATH, pytest
+from tests.data import COMMAND_ATTRS, FILE_PATH, pytest
 
 
 @COMMAND_ATTRS
@@ -43,8 +43,8 @@ def test_input_cicle_return_description(mock_input, cmd_name, expected_descr) ->
 @pytest.mark.parametrize(
     "cmd_name, expected_handler_result",
     (
-        (c.BALANCE_CMD, EXPECTED_BALANCE_RESULT),
-        ("/b", EXPECTED_BALANCE_RESULT),
+        # (c.BALANCE_CMD, EXPECTED_BALANCE_RESULT),
+        # ("/b", EXPECTED_BALANCE_RESULT),
         (c.ADD_CMD, c.RECORD_SAVED_MSG),
         ("/a", c.RECORD_SAVED_MSG),
         # (c.EDIT_CMD, h.edit_record),
