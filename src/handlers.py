@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from src.constants import BALANCE, CREDIT, DEBIT
+from src.constants import BALANCE, CREDIT, DEBIT, RECORD_SAVED_MSG
 from src.repository import read_csv, write_csv
 from src.types import Rows
 from src.utils import get_today
@@ -16,7 +16,7 @@ def add_record(file_path: str) -> str:
     value = get_valid_decimal(input, "Введите сумму: ")
     description = input("Введите описание: ")
     write_csv(file_path, [date, category, str(value), description])
-    return "Запись добавлена."
+    return RECORD_SAVED_MSG
 
 
 def search_record(file_path: str, search_value: str | None = None) -> Rows:

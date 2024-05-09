@@ -36,6 +36,7 @@ CATEGORY_INPUT_ERR_MSG = (
     f"Ожидается ввод одного из вариантов " f"из {CATEGORIES}{TRY_AGAIN_MSG}"
 )
 SOMETHING_WRONG_MSG = f"Что то пошло не так{TRY_AGAIN_MSG}"
+RECORD_SAVED_MSG = "Запись сохранена в файл."
 
 # REPOSITORY
 REPO_DIR_NAME = "data"

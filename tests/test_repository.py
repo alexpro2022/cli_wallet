@@ -3,7 +3,7 @@ from typing import Generator
 
 import pytest
 
-from src.constants import CSV_HEADER, ENCODING
+from src.constants import CSV_HEADER
 from src.repository import (
     REPO_DIR_NAME,
     REPO_FILE_NAME,
@@ -11,14 +11,14 @@ from src.repository import (
     read_csv,
     write_csv,
 )
-
-FILE_PATH = ""
+from tests.data import FILE_PATH
 
 
 def mock_os_dir_raise_exc(*args, **kwargs):
     raise FileExistsError
 
 
+"""
 def mock_open_file(*args, **kwargs):
     class FakeFIle:
         def __enter__(*args, **kwargs): ...
@@ -28,6 +28,10 @@ def mock_open_file(*args, **kwargs):
     assert args[1] in ("a", "r")
     assert kwargs == ENCODING
     return FakeFIle()
+    # monkeypatch.setattr("builtins.open", mock_open_file)
+    # monkeypatch.setattr("builtins.open", mock_open_file)
+
+"""
 
 
 def mock_csv_writer(file, quoting, lineterminator):
@@ -41,8 +45,12 @@ def mock_csv_writer(file, quoting, lineterminator):
     return _writer()
 
 
-def test_read_csv(monkeypatch) -> None:
-    monkeypatch.setattr("builtins.open", mock_open_file)
+def test_write_csv(monkeypatch, mock_open_file) -> None:
+    monkeypatch.setattr("csv.writer", mock_csv_writer)
+    write_csv(FILE_PATH, CSV_HEADER)
+
+
+def test_read_csv(monkeypatch, mock_open_file) -> None:
     monkeypatch.setattr("csv.reader", lambda _: range(10))
     reader = read_csv(FILE_PATH)
     assert isinstance(reader, Generator)
@@ -50,12 +58,6 @@ def test_read_csv(monkeypatch) -> None:
     for row in reader:
         assert row == counter
         counter += 1
-
-
-def test_write_csv(monkeypatch) -> None:
-    monkeypatch.setattr("builtins.open", mock_open_file)
-    monkeypatch.setattr("csv.writer", mock_csv_writer)
-    write_csv(FILE_PATH, CSV_HEADER)
 
 
 @pytest.mark.parametrize("mock", (None, mock_os_dir_raise_exc))
