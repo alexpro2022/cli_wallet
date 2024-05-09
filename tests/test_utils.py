@@ -1,6 +1,9 @@
+from datetime import datetime as dt
+from datetime import timedelta
+
 import pytest
 
-from src.utils import REPO_DIR_NAME, REPO_FILE_NAME, create_repository, parse
+from src.utils import get_today, parse
 
 
 @pytest.mark.parametrize(
@@ -15,12 +18,7 @@ def test_parse(input, expected) -> None:
     assert parse(input) == expected
 
 
-def mock_os_dir_raise_exc(*args, **kwargs):
-    raise FileExistsError
-
-
-@pytest.mark.parametrize("mock", (None, mock_os_dir_raise_exc))
-@pytest.mark.parametrize("name", (REPO_DIR_NAME, REPO_FILE_NAME))
-def test_create_repository(monkeypatch, mock_os_dir, mock, name) -> None:
-    mock_os_dir() if mock is None else mock_os_dir(mock)
-    assert create_repository().find(name) != -1
+@pytest.mark.parametrize("days", (-1, 0, 1))
+def test_get_today(days) -> None:
+    assert isinstance(get_today(), str)
+    assert get_today(days) == str(dt.today().date() + timedelta(days))
