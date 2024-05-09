@@ -1,6 +1,7 @@
 # cli_wallet
 
 [![Test Suite](https://github.com/alexpro2022/cli_wallet/actions/workflows/branch_test.yml/badge.svg)](https://github.com/alexpro2022/cli_wallet/actions/workflows/branch_test.yml)
+[![codecov](https://codecov.io/gh/alexpro2022/cli_wallet/graph/badge.svg?token=81RgzLVrpG)](https://codecov.io/gh/alexpro2022/cli_wallet)
 
 <br>
 
@@ -46,7 +47,7 @@
 
 ## Установка приложения:
 
-1. Клонируйте репозиторий с GitHub и введите данные для переменных окружения (значения даны для примера, но их можно оставить):
+1. Клонируйте репозиторий с GitHub:
 
 ```bash
 git clone https://github.com/alexpro2022/cli_wallet.git
