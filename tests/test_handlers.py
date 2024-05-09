@@ -21,7 +21,7 @@ def test_search_record_with_manual_input(
 
 
 def test_balance(search_setup) -> None:
-    assert balance(FILE_PATH) == EXPECTED_BALANCE_RESULT
+    assert balance(FILE_PATH, idx=2) == EXPECTED_BALANCE_RESULT
 
 
 def test_add_record(add_setup) -> None:

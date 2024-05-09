@@ -26,9 +26,9 @@ def search_record(file_path: str, search_value: str | None = None) -> Rows:
     return [row for row in read_csv(file_path) if search_value in row]
 
 
-def balance(file_path: str) -> tuple[str, str, str]:
+def balance(file_path: str, idx: int = 3) -> tuple[str, str, str]:
     def _sum(rows: Rows):
-        return sum(map(Decimal, [row[2] for row in rows]))
+        return sum(map(Decimal, [row[idx] for row in rows]))
 
     def _f(name: str, value: Decimal) -> str:
         return f"{name}: {value}"
