@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from src import constants as c
-from src import handlers as h
+from src.handlers import handlers as h
 
 
 @dataclass

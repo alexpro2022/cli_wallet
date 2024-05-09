@@ -1,7 +1,7 @@
 from pandas import DataFrame
 
 from src import constants as c
-from src.handlers import add_record, balance, edit_record, search_record
+from src.handlers.handlers import add_record, balance, edit_record, search_record
 from tests.data import EXPECTED_BALANCE_RESULT, FILE_DATA, FILE_PATH, SEARCH_PARAMS
 
 
@@ -41,7 +41,7 @@ def test_edit_record(monkeypatch) -> None:
             assert "расход   123  Описание расходов" in str(self)
 
     monkeypatch.setattr("pandas.read_csv", lambda _: DF(FILE_DATA))
-    monkeypatch.setattr("src.handlers.choose_row", lambda _: ROW)
-    monkeypatch.setattr("src.handlers.get_new_data", lambda: NEW_DATA)
+    monkeypatch.setattr("src.handlers.handlers.choose_row", lambda _: ROW)
+    monkeypatch.setattr("src.handlers.handlers.get_new_data", lambda: NEW_DATA)
     monkeypatch.setattr("pandas.DataFrame", lambda: DF)
     edit_record(FILE_PATH)

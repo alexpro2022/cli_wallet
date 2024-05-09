@@ -4,9 +4,10 @@ import pandas as pd
 
 from src import constants as c
 from src.constants import BALANCE, CREDIT, DEBIT
+from src.handlers.utils import choose_row, get_new_data
 from src.repository import read_csv, write_csv
 from src.types import Rows
-from src.utils import choose_row, get_new_data, get_today
+from src.utils import get_today
 from src.validators import get_valid_category, get_valid_decimal
 
 
