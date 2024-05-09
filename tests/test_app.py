@@ -1,20 +1,16 @@
-import pytest
-
 from src import constants as c
 from src.app import app, get_cmd_attr, input_cicle
 from src.commands import Commands
-
-FILE_PATH = ""
-attrs = pytest.mark.parametrize("attr", ("description", "handler"))
+from tests.data import COMMAND_ATTRS, EXPECTED_BALANCE_RESULT, FILE_PATH, pytest
 
 
-@attrs
+@COMMAND_ATTRS
 def test_get_attr_invalid_command(attr) -> None:
     invalid_command = "/"
     assert get_cmd_attr(invalid_command, attr) == c.HELP_MSG
 
 
-@attrs
+@COMMAND_ATTRS
 @pytest.mark.parametrize(
     "cmd_name, expected_command",
     (
@@ -47,17 +43,24 @@ def test_input_cicle_return_description(mock_input, cmd_name, expected_descr) ->
 @pytest.mark.parametrize(
     "cmd_name, expected_handler_result",
     (
-        # (c.BALANCE_CMD, None),
-        # (c.ADD_CMD, None),
-        # (c.EDIT_CMD, None),
-        # (c.SEARCH_CMD, None),
+        (c.BALANCE_CMD, EXPECTED_BALANCE_RESULT),
+        ("/b", EXPECTED_BALANCE_RESULT),
+        (c.ADD_CMD, c.RECORD_SAVED_MSG),
+        ("/a", c.RECORD_SAVED_MSG),
+        # (c.EDIT_CMD, h.edit_record),
+        # ("/e", h.edit_record),
+        (c.SEARCH_CMD, []),
+        ("/s", []),
         (c.EXIT_CMD, -1),
+        ("/q", -1),
     ),
 )
 def test_input_cicle_return_handler_result(
-    mock_input, cmd_name, expected_handler_result
+    search_setup, add_setup, mock_input, cmd_name, expected_handler_result
 ) -> None:
+    # def mock
     mock_input(cmd_name)
+    # monkeypatch.setattr("src.handlers.balance", lambda _: "balance handler")
     assert input_cicle(FILE_PATH) == expected_handler_result
 
 
