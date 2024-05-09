@@ -6,17 +6,6 @@ from src.constants import CSV_HEADER, ENCODING, REPO_DIR_NAME, REPO_FILE_NAME
 from src.types import Row
 
 
-def read_csv(file_path: str) -> Generator[Row, Any, None]:
-    with open(file_path, "r", **ENCODING) as file:  # type: ignore [call-overload]
-        yield from csv.reader(file)
-
-
-def write_csv(file_path: str, row: Row, mode: str = "a") -> None:
-    with open(file_path, mode, **ENCODING) as csv_file:  # type: ignore [call-overload]
-        writer = csv.writer(csv_file, quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
-        writer.writerow(row)
-
-
 def create_repository(
     dir_name: str = REPO_DIR_NAME, file_name: str = REPO_FILE_NAME
 ) -> str:
@@ -28,3 +17,14 @@ def create_repository(
     if not os.path.exists(file_path):
         write_csv(file_path, CSV_HEADER)
     return file_path
+
+
+def write_csv(file_path: str, row: Row, mode: str = "a") -> None:
+    with open(file_path, mode, **ENCODING) as csv_file:  # type: ignore [call-overload]
+        writer = csv.writer(csv_file, quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
+        writer.writerow(row)
+
+
+def read_csv(file_path: str) -> Generator[Row, Any, None]:
+    with open(file_path, "r", **ENCODING) as file:  # type: ignore [call-overload]
+        yield from csv.reader(file)
