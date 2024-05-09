@@ -33,7 +33,7 @@ def search_setup(monkeypatch):
         assert file_path == FILE_PATH
         yield from FILE_DATA
 
-    monkeypatch.setattr("src.handlers.read_csv", mock_read_csv)
+    monkeypatch.setattr("src.handlers.handlers.read_csv", mock_read_csv)
 
 
 @pytest.fixture
@@ -70,6 +70,10 @@ def add_setup(monkeypatch, mock_input):
         assert row[2] == "111.111"
         assert row[3] == "description"
 
-    monkeypatch.setattr("src.handlers.get_valid_category", mock_get_valid_category)
-    monkeypatch.setattr("src.handlers.get_valid_decimal", mock_get_valid_decimal)
-    monkeypatch.setattr("src.handlers.write_csv", mock_write_csv)
+    monkeypatch.setattr(
+        "src.handlers.handlers.get_valid_category", mock_get_valid_category
+    )
+    monkeypatch.setattr(
+        "src.handlers.handlers.get_valid_decimal", mock_get_valid_decimal
+    )
+    monkeypatch.setattr("src.handlers.handlers.write_csv", mock_write_csv)
