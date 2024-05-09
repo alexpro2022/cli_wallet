@@ -40,7 +40,7 @@ repos:
     hooks:
     -   id: flake8
         exclude: "__init__.py"
-        args: ["--ignore=E704"]
+        args: ["--ignore=E203,E704"]
 
 # Проверка статических типов с помощью mypy
 -   repo: https://github.com/pre-commit/mirrors-mypy

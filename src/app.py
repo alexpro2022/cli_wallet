@@ -20,19 +20,27 @@ def get_cmd_attr(cmd: str, attribute: str):
 
 
 def input_cicle(file_path: str) -> int | str:
-    try:
-        cmd, flag = parse(input(c.INPUT_MSG))
+    """Main dialog. Expecting the commands input for further action."""
+
+    def convert_short_to_full(cmd: str) -> str:
+        """Convert short commands to its full versions."""
         match cmd:
             case "/b":
-                cmd = c.BALANCE_CMD
+                return c.BALANCE_CMD
             case "/a":
-                cmd = c.ADD_CMD
+                return c.ADD_CMD
             case "/s":
-                cmd = c.SEARCH_CMD
+                return c.SEARCH_CMD
             case "/e":
-                cmd = c.EDIT_CMD
+                return c.EDIT_CMD
             case "/q":
-                cmd = c.EXIT_CMD
+                return c.EXIT_CMD
+            case _:
+                return cmd
+
+    try:
+        cmd, flag = parse(input(c.INPUT_MSG))
+        cmd = convert_short_to_full(cmd)
         if flag == c.DESCR_FLAG:
             return get_cmd_attr(cmd, "description")
         return get_cmd_attr(cmd, "handler")(file_path)

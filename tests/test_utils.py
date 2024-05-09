@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+from datetime import timedelta
 
 import pytest
 
@@ -17,6 +18,7 @@ def test_parse(input, expected) -> None:
     assert parse(input) == expected
 
 
-def test_get_today() -> None:
+@pytest.mark.parametrize("days", (-1, 0, 1))
+def test_get_today(days) -> None:
     assert isinstance(get_today(), str)
-    assert get_today() == str(dt.today().date())
+    assert get_today(days) == str(dt.today().date() + timedelta(days))

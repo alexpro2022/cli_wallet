@@ -58,9 +58,7 @@ def test_input_cicle_return_description(mock_input, cmd_name, expected_descr) ->
 def test_input_cicle_return_handler_result(
     search_setup, add_setup, mock_input, cmd_name, expected_handler_result
 ) -> None:
-    # def mock
     mock_input(cmd_name)
-    # monkeypatch.setattr("src.handlers.balance", lambda _: "balance handler")
     assert input_cicle(FILE_PATH) == expected_handler_result
 
 

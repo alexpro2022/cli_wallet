@@ -3,11 +3,13 @@ CATEGORIES = ("доход", "расход")
 DESCR_FLAG = "d"
 
 # COMMANDS
-BALANCE_CMD = "balance"
+BALANCE_CMD = "balance"  # also /b
 ADD_CMD = "add"
 EDIT_CMD = "edit"
 SEARCH_CMD = "search"
 EXIT_CMD = "exit"
+UP_CMD = "/u"
+DOWN_CMD = "/d"
 
 # DESCRIPTIONS
 BALANCE_CMD_DESCR = (
@@ -37,6 +39,15 @@ CATEGORY_INPUT_ERR_MSG = (
 )
 SOMETHING_WRONG_MSG = f"Что то пошло не так{TRY_AGAIN_MSG}"
 RECORD_SAVED_MSG = "Запись сохранена в файл."
+EDIT_MSG = (
+    "Введите номер строки для редактирования, либо команды "
+    "/u /d для скроллинга вверх-вниз соответственно: "
+)
+NO_SCROLL_UP_MSG = "Достигнуто начало таблицы. Скроллинг вверх невозможен: "
+NO_SCROLL_DOWN_MSG = "Достигнут конец таблицы. Скроллинг вниз невозможен: "
+INPUT_NEW_DATA_MSG = (
+    "Введите через пробел название_столбца новое_значение. (Выход - /q): "
+)
 
 # REPOSITORY
 REPO_DIR_NAME = "data"
@@ -48,3 +59,5 @@ CSV_HEADER = "Дата,Категория,Сумма,Описание".split(","
 DEBIT = "доход"
 CREDIT = "расход"
 BALANCE = "баланс"
+
+PAGINATION = 3
