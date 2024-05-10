@@ -1,4 +1,3 @@
-import csv
 from typing import Generator
 
 import pytest
@@ -20,23 +19,17 @@ def mock_os_dir_raise_exc(*args, **kwargs):
 
 @pytest.mark.parametrize("mock", (None, mock_os_dir_raise_exc))
 @pytest.mark.parametrize("name", (REPO_DIR_NAME, REPO_FILE_NAME))
-def test_create_repository(mock_os_dir, mock, name) -> None:
-    mock_os_dir() if mock is None else mock_os_dir(mock)
+def test_create_repository_return_file_path(mock_os_dir, mock, name) -> None:
+    mock_os_dir() if mock is None else mock_os_dir(mock_func=mock)
     assert create_repository().find(name) != -1
 
 
-def test_write_csv(monkeypatch, mock_open_file) -> None:
-    def mock_csv_writer(file, quoting, lineterminator):
-        class _writer:
-            @staticmethod
-            def writerow(row):
-                assert row == CSV_HEADER
+def test_create_repository_create_csv_file(mock_os_dir, mock_csv_writer) -> None:
+    mock_os_dir(file_exists=False)
+    assert isinstance(create_repository(), str)
 
-        assert quoting == csv.QUOTE_MINIMAL
-        assert lineterminator == "\n"
-        return _writer()
 
-    monkeypatch.setattr("csv.writer", mock_csv_writer)
+def test_write_csv(mock_csv_writer) -> None:
     write_csv(FILE_PATH, CSV_HEADER)
 
 

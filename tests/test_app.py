@@ -29,10 +29,15 @@ def test_get_attr(cmd_name, expected_command, attr) -> None:
     "cmd_name, expected_descr",
     (
         (c.BALANCE_CMD, c.BALANCE_CMD_DESCR),
+        ("/b", c.BALANCE_CMD_DESCR),
         (c.ADD_CMD, c.ADD_CMD_DESCR),
+        ("/a", c.ADD_CMD_DESCR),
         (c.EDIT_CMD, c.EDIT_CMD_DESCR),
+        ("/e", c.EDIT_CMD_DESCR),
         (c.SEARCH_CMD, c.SEARCH_CMD_DESCR),
+        ("/s", c.SEARCH_CMD_DESCR),
         (c.EXIT_CMD, c.EXIT_CMD_DESCR),
+        ("/q", c.EXIT_CMD_DESCR),
     ),
 )
 def test_input_cicle_return_description(mock_input, cmd_name, expected_descr) -> None:
@@ -40,19 +45,20 @@ def test_input_cicle_return_description(mock_input, cmd_name, expected_descr) ->
     assert input_cicle(FILE_PATH) == expected_descr
 
 
+@pytest.mark.parametrize("invalid_input", ("asd", 111, [], {}))
+def test_input_cicle_return_wrong_msg(mock_input, invalid_input) -> None:
+    mock_input(invalid_input)
+    assert input_cicle(FILE_PATH) == c.SOMETHING_WRONG_MSG
+
+
 @pytest.mark.parametrize(
     "cmd_name, expected_handler_result",
     (
-        # (c.BALANCE_CMD, EXPECTED_BALANCE_RESULT),
-        # ("/b", EXPECTED_BALANCE_RESULT),
         (c.ADD_CMD, c.RECORD_SAVED_MSG),
-        ("/a", c.RECORD_SAVED_MSG),
-        # (c.EDIT_CMD, h.edit_record),
-        # ("/e", h.edit_record),
         (c.SEARCH_CMD, []),
-        ("/s", []),
         (c.EXIT_CMD, -1),
-        ("/q", -1),
+        # (c.BALANCE_CMD, EXPECTED_BALANCE_RESULT),
+        # (c.EDIT_CMD, h.edit_record),
     ),
 )
 def test_input_cicle_return_handler_result(
@@ -66,3 +72,18 @@ def test_app_exit(mock_input, mock_os_dir) -> None:
     mock_input(c.EXIT_CMD)
     mock_os_dir()
     assert app() == -1
+
+
+def test_app_print_result(monkeypatch, mock_os_dir) -> None:
+    class TestException(Exception):
+        pass
+
+    def mock_pprint(*args, **kwargs) -> None:
+        assert args[0] == "TEST"
+        raise TestException
+
+    monkeypatch.setattr("src.app.pprint", mock_pprint)
+    monkeypatch.setattr("src.app.input_cicle", lambda _: "TEST")
+    mock_os_dir()
+    with pytest.raises(TestException):
+        app()

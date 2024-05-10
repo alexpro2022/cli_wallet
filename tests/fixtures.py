@@ -1,9 +1,10 @@
+import csv
 from typing import Callable
 
 import pytest
 
 from src import constants as c
-from src.constants import ENCODING
+from src.constants import CSV_HEADER, ENCODING
 from src.types import Row
 from src.utils import get_today
 from src.validators import Decimal, get_valid_category, get_valid_decimal
@@ -20,20 +21,13 @@ def mock_input(monkeypatch) -> Callable:
 
 @pytest.fixture
 def mock_os_dir(monkeypatch) -> Callable:
-    def mock_os_dir_with(mock_func: Callable = lambda _: ...) -> None:
+    def mock_os_dir_with(
+        *, mock_func: Callable = lambda _: ..., file_exists: bool = True
+    ) -> None:
         monkeypatch.setattr("os.mkdir", mock_func)
-        monkeypatch.setattr("os.path.exists", lambda _: True)
+        monkeypatch.setattr("os.path.exists", lambda _: file_exists)
 
     return mock_os_dir_with
-
-
-@pytest.fixture
-def search_setup(monkeypatch):
-    def mock_read_csv(file_path):
-        assert file_path == FILE_PATH
-        yield from FILE_DATA
-
-    monkeypatch.setattr("src.handlers.handlers.read_csv", mock_read_csv)
 
 
 @pytest.fixture
@@ -43,12 +37,27 @@ def mock_open_file(monkeypatch):
             def __enter__(*args, **kwargs): ...
             def __exit__(*args, **kwargs): ...
 
-        assert args[0] == FILE_PATH
-        assert args[1] in ("a", "r")
-        assert kwargs == ENCODING
+        assert isinstance(args[0], str)  # file
+        assert args[1] in ("a", "r")  # mode
+        assert kwargs == ENCODING  # encoding
         return FakeFIle()
 
     monkeypatch.setattr("builtins.open", _mock_open_file)
+
+
+@pytest.fixture
+def mock_csv_writer(monkeypatch, mock_open_file):
+    def _mock_csv_writer(file, quoting, lineterminator):
+        class _writer:
+            @staticmethod
+            def writerow(row):
+                assert row == CSV_HEADER
+
+        assert quoting == csv.QUOTE_MINIMAL
+        assert lineterminator == "\n"
+        return _writer()
+
+    monkeypatch.setattr("csv.writer", _mock_csv_writer)
 
 
 @pytest.fixture
@@ -77,3 +86,12 @@ def add_setup(monkeypatch, mock_input):
         "src.handlers.handlers.get_valid_decimal", mock_get_valid_decimal
     )
     monkeypatch.setattr("src.handlers.handlers.write_csv", mock_write_csv)
+
+
+@pytest.fixture
+def search_setup(monkeypatch):
+    def mock_read_csv(file_path):
+        assert file_path == FILE_PATH
+        yield from FILE_DATA
+
+    monkeypatch.setattr("src.handlers.handlers.read_csv", mock_read_csv)
