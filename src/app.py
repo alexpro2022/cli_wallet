@@ -44,7 +44,7 @@ def input_cicle(file_path: str) -> int | str:
         if flag == c.DESCR_FLAG:
             return get_cmd_attr(cmd, "description")
         return get_cmd_attr(cmd, "handler")(file_path)
-    except TypeError:
+    except (AttributeError, TypeError):
         return c.SOMETHING_WRONG_MSG
 
 
