@@ -3,11 +3,11 @@ CATEGORIES = ("доход", "расход")
 DESCR_FLAG = "d"
 
 # COMMANDS
-BALANCE_CMD = "balance"  # also /b
+BALANCE_CMD = "balance"
 ADD_CMD = "add"
 EDIT_CMD = "edit"
 SEARCH_CMD = "search"
-EXIT_CMD = "exit"
+EXIT_CMD = "quit"
 UP_CMD = "/u"
 DOWN_CMD = "/d"
 
